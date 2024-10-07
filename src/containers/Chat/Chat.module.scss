@@ -8,7 +8,7 @@
   width: 100%;
 
   .header {
-    font-size: 5rem;
+    font-size: 3rem;
     font-weight: 800;
     color: white;
   }
@@ -18,11 +18,45 @@
     background-color: rgb(190, 245, 245);
     flex-shrink: 0;
     display: flex;
-    flex: 1
+    flex: 1;
   }
 
- .footer {
+  .footer {
+    display: flex;
+    flex-direction: row;
     background-color: black;
     color: white;
+    width: 100%;
+    padding: 16px 0px;
+    margin: 0px 16px;
+    gap: 10px;
+
+    .input {
+      flex: 1;
+      margin-left: 16px;
+      background-color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 600;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .button {
+      background-color: #0000FF;
+      color: white;
+      padding: 8px 16px;
+      margin-right: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+
+      &:active {
+        background-color: #0000AA;
+      }
+    }
   }
 }
