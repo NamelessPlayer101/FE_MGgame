@@ -24,6 +24,19 @@
     gap: 12px;
     padding: 20px;
 
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgb(190, 245, 245);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(0, 121, 151);
+      border-radius: 20px;
+    }
+
     .message {
       background-color: white;
       padding: 8px 16px;
