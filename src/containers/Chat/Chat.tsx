@@ -2,15 +2,27 @@ import React from "react";
 import style from "./Chat.module.scss";
 import { socket } from "../../services/socket";
 
+interface IMessage {
+  id: string;
+  message: string;
+}
+
 function Chat() {
   const [message, setMessage] = React.useState("");
-  const [messages, setMessages] = React.useState<string[]>([]);
+  const [messages, setMessages] = React.useState<IMessage[]>([]);
 
   React.useEffect(() => {
     socket.on("connection", (socket) => {});
 
     socket.on("chat", (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
+      const temp = JSON.parse(data);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          id: temp.id,
+          message: temp.message,
+        },
+      ]);
     });
 
     return () => {
@@ -39,7 +51,7 @@ function Chat() {
     <div className={style.container}>
       <div
         onClick={() => {
-          console.log(JSON.stringify(messages));
+          console.log(socket.id);
         }}
         className={style.header}
       >
@@ -47,8 +59,22 @@ function Chat() {
       </div>
       <div className={style.content}>
         {messages.map((message, index) => (
-          <div key={index} className={style.message}>
-            {message}
+          <div
+            key={index}
+            className={style.message}
+            style={
+              message.id === socket.id
+                ? {
+                    alignSelf: "end",
+                    backgroundColor: "#08C2FF",
+                    color: "white",
+                  }
+                : {}
+            }
+          >
+            {message.id === socket.id
+              ? `${message.message}`
+              : `${message.id}: ${message.message}`}
           </div>
         ))}
       </div>
