@@ -74,7 +74,7 @@ function Chat() {
           >
             {message.id === socket.id
               ? `${message.message}`
-              : `${message.id}: ${message.message}`}
+              : `${message.id??'unknown'}: ${message.message}`}
           </div>
         ))}
       </div>
