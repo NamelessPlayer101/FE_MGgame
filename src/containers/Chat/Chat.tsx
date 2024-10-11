@@ -1,5 +1,4 @@
 import React from "react";
-import style from "./Chat.module.scss";
 import { socket } from "../../services/socket";
 
 interface IMessage {
@@ -32,8 +31,8 @@ function Chat() {
   }, []);
 
   React.useEffect(() => {
-    const message = document.querySelector(`.${style.message}`);
-    const content = document.querySelector(`.${style.content}`);
+    const message = document.querySelector(`.message`);
+    const content = document.querySelector(`.content`);
     if (message && content) {
       const isAtBottom =
         content.scrollHeight - content.scrollTop === content.clientHeight;
@@ -48,20 +47,20 @@ function Chat() {
   };
 
   return (
-    <div className={style.container}>
+    <div className={'chat'}>
       <div
         onClick={() => {
           console.log(socket.id);
         }}
-        className={style.header}
+        className={'header'}
       >
         Chat
       </div>
-      <div className={style.content}>
+      <div className={'content'}>
         {messages.map((message, index) => (
           <div
             key={index}
-            className={style.message}
+            className={'message'}
             style={
               message.id === socket.id
                 ? {
@@ -74,11 +73,11 @@ function Chat() {
           >
             {message.id === socket.id
               ? `${message.message}`
-              : `${message.id??'unknown'}: ${message.message}`}
+              : `${message.id ?? "unknown"}: ${message.message}`}
           </div>
         ))}
       </div>
-      <div className={style.footer}>
+      <div className={'footer'}>
         <input
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -88,12 +87,15 @@ function Chat() {
               onSubmit();
             }
           }}
-          className={style.input}
+          className={'input'}
           type="text"
         />
-        <div onClick={message ? onSubmit : () => {}} className={style.button}>
+        <button
+          onClick={message ? onSubmit : () => {}}
+          className={'button'}
+        >
           Send
-        </div>
+        </button>
       </div>
     </div>
   );

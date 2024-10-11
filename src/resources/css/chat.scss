@@ -1,4 +1,4 @@
-.container {
+.chat {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,8 +21,8 @@
     overflow-y: auto;
     flex-direction: column;
     align-items: start;
-    gap: 12px;
-    padding: 20px;
+    gap: $px12;
+    padding: $px20;
 
     &::-webkit-scrollbar {
       width: 10px;
@@ -39,8 +39,8 @@
 
     .message {
       background-color: white;
-      padding: 8px 16px;
-      border-radius: 8px;
+      padding: $px8 $px16;
+      border-radius: $px8;
       font-size: 1em;
       font-weight: 600;
       max-width: 60%;
@@ -77,7 +77,7 @@
     }
 
     .button {
-      background-color: #08C2FF;
+      background-color: #08c2ff;
       color: white;
       padding: 8px 32px;
       margin-right: 16px;

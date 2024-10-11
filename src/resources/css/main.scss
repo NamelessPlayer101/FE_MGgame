@@ -1,0 +1,27 @@
+@import './variable.scss';
+
+.App {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  background-color: #282c34;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.test {
+  color: white;
+}
+
+@import './chat.scss'
