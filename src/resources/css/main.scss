@@ -26,9 +26,6 @@ body {
   height: 100%;
 }
 
-.test {
-  color: white;
-}
-
 @import "./chat.scss";
+@import "./menu.scss";
 @import "./common-components.scss";

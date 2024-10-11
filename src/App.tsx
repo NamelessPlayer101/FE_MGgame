@@ -1,9 +1,9 @@
-import Chat from './containers/Chat/Chat';
+import Menu from './components/Layout/Menu';
 
 function App() {
   return (
     <div className="App">
-      <Chat />
+      <Menu />
     </div>
   );
 }
