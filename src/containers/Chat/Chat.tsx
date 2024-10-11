@@ -93,6 +93,7 @@ function Chat() {
         <button
           onClick={message ? onSubmit : () => {}}
           className={'button'}
+          style={{marginRight: "16px"}}
         >
           Send
         </button>
