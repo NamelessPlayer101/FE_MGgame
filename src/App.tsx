@@ -1,4 +1,3 @@
-import './resources/css/main.scss';
 import Chat from './containers/Chat/Chat';
 
 function App() {
