@@ -1,9 +1,9 @@
-import Menu from './components/Layout/Menu';
+import MyRoutes from './Routes';
 
 function App() {
   return (
     <div className="App">
-      <Menu />
+      <MyRoutes />
     </div>
   );
 }
