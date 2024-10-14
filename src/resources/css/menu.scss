@@ -23,9 +23,12 @@
     align-items: center;
     justify-content: center;
 
-    .item {
+    .item-menu {
       font-size: 2rem;
       font-weight: 600;
+      color: white;
+      text-decoration: none;
+      outline: none;
       cursor: pointer;
 
       &:hover {

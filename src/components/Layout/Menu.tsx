@@ -1,12 +1,16 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 function Menu() {
   return (
     <div className="menu">
       <div className="header">MG</div>
       <div className="content">
-        <div className="item">Chat</div>
-        <div className="item">Game</div>
+        <Link to="/chat" className="item-menu">
+          Chat
+        </Link>
+        <Link to="/game" className="item-menu">
+          Game
+        </Link>
       </div>
     </div>
   );
