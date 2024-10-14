@@ -2,6 +2,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Menu from "./components/Layout/Menu";
 import Chat from "./containers/Chat";
 import Page404 from "./containers/Page404";
+import Game from "./containers/Game";
 
 function MyRoutes() {
   return (
@@ -9,7 +10,7 @@ function MyRoutes() {
       <Routes>
         <Route path="/" element={<Menu />} />
         <Route path="/chat" element={<Chat />} />
-        <Route path="/game" element={<Menu />} />
+        <Route path="/game" element={<Game />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
     </Router>
