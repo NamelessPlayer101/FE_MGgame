@@ -7,12 +7,11 @@ interface IMessage {
 }
 
 function Chat() {
+  const [isConnected, setIsConnected] = React.useState(socket.connected);
   const [message, setMessage] = React.useState("");
   const [messages, setMessages] = React.useState<IMessage[]>([]);
 
   React.useEffect(() => {
-    socket.on("connection", (socket) => {});
-
     socket.on("chat", (data) => {
       const temp = JSON.parse(data);
       setMessages((prevMessages) => [
@@ -24,9 +23,11 @@ function Chat() {
       ]);
     });
 
+    socket.connect();
+
     return () => {
-      socket.off("connection");
       socket.off("chat");
+      socket.disconnect();
     };
   }, []);
 
