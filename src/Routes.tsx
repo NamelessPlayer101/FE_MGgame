@@ -1,6 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Menu from "./components/Layout/Menu";
-import Chat from "./containers/Chat/Chat";
+import Chat from "./containers/Chat";
 import Page404 from "./containers/Page404";
 
 function MyRoutes() {
