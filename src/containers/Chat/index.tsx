@@ -7,7 +7,6 @@ interface IMessage {
 }
 
 function Chat() {
-  const [isConnected, setIsConnected] = React.useState(socket.connected);
   const [message, setMessage] = React.useState("");
   const [messages, setMessages] = React.useState<IMessage[]>([]);
 

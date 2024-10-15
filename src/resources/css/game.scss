@@ -1,0 +1,43 @@
+.game {
+  position: relative;
+  color: white;
+  height: 100%;
+  width: 100%;
+
+  .name-player {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $px20;
+
+    .name-player-input {
+      background-color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 600;
+      line-height: 1.5em;
+      text-align: center;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .button-start {
+      outline: none;
+      border-radius: $px20;
+      background-color: #08c2ff;
+      padding: $px8 $px32;
+    }
+  }
+}

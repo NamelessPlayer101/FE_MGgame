@@ -10,4 +10,15 @@
   &:active {
     background-color: #098ab5;
   }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  font-size: $px32;
+  font-weight: 800;
+  color: white;
 }
