@@ -15,14 +15,21 @@ function Game() {
     };
   }, []);
 
-  return <div className="game">
-    Game
-    <div className="name-player">
-      Name player input
-      <input className="name-player-input" />
-      <button className="button btn-primary">Game on!</button>
-    </div>
-  </div>;
+  const onSubmit = (event: any) => {
+    event.preventDefault();
+    console.log('test');
+  };
+
+  return (
+    <form onSubmit={onSubmit} className="game">
+      Game
+      <div className="name-player">
+        Name player input
+        <input required className="name-player-input" name="playerName" />
+        <button type="submit" className="button btn-primary" >Game on!</button>
+      </div>
+    </form>
+  );
 }
 
 export default Game;
