@@ -2,6 +2,8 @@ import React from "react";
 import { socket } from "../../services/socket";
 
 function Game() {
+  const [isShowInput, setIsShowInput] = React.useState(true);
+
   React.useEffect(() => {
     socket.connect();
 
@@ -17,16 +19,29 @@ function Game() {
 
   const onSubmit = (event: any) => {
     event.preventDefault();
-    console.log('test');
+    setIsShowInput(false);
+    console.log(isShowInput);
   };
 
   return (
     <form onSubmit={onSubmit} className="game">
       Game
-      <div className="name-player">
+      <div className="name-player" hidden={true}>
         Name player input
-        <input required className="name-player-input" name="playerName" />
-        <button type="submit" className="button btn-primary" >Game on!</button>
+        <input
+          required
+          type="text"
+          className="name-player-input"
+          name="playerName"
+          pattern="^[a-zA-Z]+$"
+          onInvalid={(e) =>
+            e.currentTarget.setCustomValidity('Chỉ bao gồm chữ cái')
+          }
+          onInput={(e) => e.currentTarget.setCustomValidity('')}
+        />
+        <button type="submit" className="button btn-primary">
+          Game on!
+        </button>
       </div>
     </form>
   );
