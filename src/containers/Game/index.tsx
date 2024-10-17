@@ -25,20 +25,20 @@ function Game() {
 
   return (
     <form onSubmit={onSubmit} className="game">
-      Game
-      <div className="name-player" hidden={true}>
+      <div
+        onClick={() => {
+          console.log(isShowInput);
+          setIsShowInput((prev) => !prev);
+        }}
+      >
+        Game
+      </div>
+      <div
+        className="name-player"
+        style={{ display: isShowInput ? "flex" : "none" }}
+      >
         Name player input
-        <input
-          required
-          type="text"
-          className="name-player-input"
-          name="playerName"
-          pattern="^[a-zA-Z]+$"
-          onInvalid={(e) =>
-            e.currentTarget.setCustomValidity('Chỉ bao gồm chữ cái')
-          }
-          onInput={(e) => e.currentTarget.setCustomValidity('')}
-        />
+        <input type="text" className="name-player-input" name="playerName" />
         <button type="submit" className="button btn-primary">
           Game on!
         </button>
