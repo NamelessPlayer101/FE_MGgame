@@ -34,6 +34,30 @@ function Game() {
     },
   });
 
+  React.useEffect(() => {
+    socket.connect();
+
+    socket.on("game", (data) => {
+      console.log(data);
+    });
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener("visibilitychange", handleVisibilityChange);
+      socket.off("game");
+      socket.disconnect();
+    };
+  }, []);
+
+  const onSubmit = (event: any) => {
+    event.preventDefault();
+    setIsShowInput(false);
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("visibilitychange", handleVisibilityChange);
+  };
+
   const handleKeyDown = (e: any) => {
     switch (e.code) {
       case "KeyW":
@@ -58,7 +82,7 @@ function Game() {
         setKeys((prev: IKeys) => {
           const newKeys = { ...prev, d: { pressed: true } };
           return newKeys;
-        })
+        });
         break;
     }
   };
@@ -87,58 +111,33 @@ function Game() {
         setKeys((prev: IKeys) => {
           const newKeys = { ...prev, d: { pressed: false } };
           return newKeys;
-        })
+        });
         break;
     }
   };
 
-  React.useEffect(() => {
-    socket.connect();
-
-    socket.on("game", (data) => {
-      console.log(data);
-    });
-
-    
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        // Thực hiện các hành động khi tab bị ẩn (giống như pause)
-        setKeys({
-          w: {
-            pressed: false,
-          },
-          a: {
-            pressed: false,
-          },
-          s: {
-            pressed: false,
-          },
-          d: {
-            pressed: false,
-          },
-        })
-      } else {
-        // Thực hiện các hành động khi tab quay lại (giống như resume)
-        console.log("Tab được hiển thị (resume)");
-      }
-    };
-    
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-    window.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-      window.removeEventListener("visibilitychange", handleVisibilityChange);
-      socket.off("game");
-      socket.disconnect();
-    };
-  }, []);
-
-  const onSubmit = (event: any) => {
-    event.preventDefault();
-    setIsShowInput(false);
+  const handleVisibilityChange = () => {
+    if (document.hidden) {
+      // Thực hiện các hành động khi tab bị ẩn (giống như pause)
+      console.log("Pause");
+      setKeys({
+        w: {
+          pressed: false,
+        },
+        a: {
+          pressed: false,
+        },
+        s: {
+          pressed: false,
+        },
+        d: {
+          pressed: false,
+        },
+      });
+    } else {
+      // Thực hiện các hành động khi tab quay lại (giống như resume)
+      console.log("Resume");
+    }
   };
 
   return (
@@ -158,9 +157,13 @@ function Game() {
         className="name-player"
         style={{ display: isShowInput ? "flex" : "none" }}
       >
-        <div onClick={() => {
-          console.log(keys);
-        }}>Name player input</div>
+        <div
+          onClick={() => {
+            console.log(keys);
+          }}
+        >
+          Name player input
+        </div>
         <input type="text" className="name-player-input" name="playerName" />
         <button type="submit" className="button btn-primary">
           Game on!
