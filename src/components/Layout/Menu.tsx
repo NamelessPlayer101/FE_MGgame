@@ -11,6 +11,9 @@ function Menu() {
         <Link to="/game" className="item-menu">
           Game
         </Link>
+        <Link to="/canvas" className="item-menu">
+          Canvas
+        </Link>
       </div>
     </div>
   );
