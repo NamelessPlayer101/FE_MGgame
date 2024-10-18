@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { socket } from "../../services/socket";
 import { Stage, Layer, Circle } from "react-konva";
 
@@ -36,9 +36,7 @@ function Game() {
 
   React.useEffect(() => {
     socket.connect();
-    socket.on("game", (data) => {
-      console.log(data);
-    });
+    socket.on("game", handleGameOn);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
@@ -46,10 +44,18 @@ function Game() {
       window.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("blur", handleWindowBlur);
       window.removeEventListener("focus", handleWindowFocus);
-      socket.off("game");
+      socket.off("game", handleGameOn);
       socket.disconnect();
     };
   }, []);
+
+  React.useEffect(() => {
+    console.log(JSON.stringify(keys));
+  }, [keys]);
+
+  const handleGameOn = (data: any) => {
+    console.log(data);
+  };
 
   const onSubmit = (event: any) => {
     window.addEventListener("keydown", handleKeyDown);
@@ -61,7 +67,7 @@ function Game() {
     setIsShowInput(false);
   };
 
-  const handleKeyDown = (e: any) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if ((e.code in keys)) {
       setKeys((prev: IKeys) => {
         const newKeys = { ...prev };
@@ -71,7 +77,7 @@ function Game() {
     };
   };
 
-  const handleKeyUp = (e: any) => {
+  const handleKeyUp = (e: KeyboardEvent) => {
     if ((e.code in keys)) {
       setKeys((prev: IKeys) => {
         const newKeys = { ...prev };
@@ -80,10 +86,6 @@ function Game() {
       });
     };
   };
-
-  useEffect(() => {
-    console.log(JSON.stringify(keys));
-  }, [keys]);
 
   const handleVisibilityChange = () => {
     setKeys({
