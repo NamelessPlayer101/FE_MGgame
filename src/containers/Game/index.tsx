@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { socket } from "../../services/socket";
 import { Stage, Layer, Circle } from "react-konva";
 
@@ -35,8 +35,6 @@ function Game() {
   });
 
   React.useEffect(() => {
-    setIsShowInput(true);
-
     socket.connect();
     socket.on("game", (data) => {
       console.log(data);
@@ -64,20 +62,64 @@ function Game() {
   };
 
   const handleKeyDown = (e: any) => {
-    console.log(e.code);
+    if ((e.code in keys)) {
+      setKeys((prev: IKeys) => {
+        const newKeys = { ...prev };
+        newKeys[e.code as keyof IKeys].pressed = true;
+        return newKeys;
+      });
+    };
   };
 
   const handleKeyUp = (e: any) => {
-    // console.log(e.code);
+    if ((e.code in keys)) {
+      setKeys((prev: IKeys) => {
+        const newKeys = { ...prev };
+        newKeys[e.code as keyof IKeys].pressed = false;
+        return newKeys;
+      });
+    };
   };
 
+  useEffect(() => {
+    console.log(JSON.stringify(keys));
+  }, [keys]);
+
   const handleVisibilityChange = () => {
+    setKeys({
+      KeyW: {
+        pressed: false,
+      },
+      KeyA: {
+        pressed: false,
+      },
+      KeyS: {
+        pressed: false,
+      },
+      KeyD: {
+        pressed: false,
+      },
+    });
     console.log("Sự kiện chuyển tab trong trình duyệt");
     window.removeEventListener("keydown", handleKeyDown);
     window.removeEventListener("keyup", handleKeyUp);
   };
 
   const handleWindowBlur = () => {
+    setKeys({
+      KeyW: {
+        pressed: false,
+      },
+      KeyA: {
+        pressed: false,
+      },
+      KeyS: {
+        pressed: false,
+      },
+      KeyD: {
+        pressed: false,
+      },
+    });
     console.log("Cửa sổ trình duyệt blur (Chuyển sang tab khác)");
     window.removeEventListener("keydown", handleKeyDown);
     window.removeEventListener("keyup", handleKeyUp);
@@ -106,13 +148,7 @@ function Game() {
         className="name-player"
         style={{ display: isShowInput ? "flex" : "none" }}
       >
-        <div
-          onClick={() => {
-            // console.log(JSON.stringify(keys));
-          }}
-        >
-          Name player
-        </div>
+        <div>Name player</div>
         <input type="text" className="name-player-input" name="playerName" />
         <button type="submit" className="button btn-primary">
           Game on!
