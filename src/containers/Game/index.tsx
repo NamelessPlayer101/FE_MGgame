@@ -3,16 +3,16 @@ import { socket } from "../../services/socket";
 import { Stage, Layer, Circle } from "react-konva";
 
 interface IKeys {
-  w: {
+  KeyW: {
     pressed: boolean;
   };
-  a: {
+  KeyA: {
     pressed: boolean;
   };
-  s: {
+  KeyS: {
     pressed: boolean;
   };
-  d: {
+  KeyD: {
     pressed: boolean;
   };
 }
@@ -20,23 +20,24 @@ interface IKeys {
 function Game() {
   const [isShowInput, setIsShowInput] = React.useState(true);
   const [keys, setKeys] = React.useState<IKeys>({
-    w: {
+    KeyW: {
       pressed: false,
     },
-    a: {
+    KeyA: {
       pressed: false,
     },
-    s: {
+    KeyS: {
       pressed: false,
     },
-    d: {
+    KeyD: {
       pressed: false,
     },
   });
 
   React.useEffect(() => {
-    socket.connect();
+    setIsShowInput(true);
 
+    socket.connect();
     socket.on("game", (data) => {
       console.log(data);
     });
@@ -45,99 +46,47 @@ function Game() {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
       window.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("blur", handleWindowBlur);
+      window.removeEventListener("focus", handleWindowFocus);
       socket.off("game");
       socket.disconnect();
     };
   }, []);
 
   const onSubmit = (event: any) => {
-    event.preventDefault();
-    setIsShowInput(false);
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
     window.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("blur", handleWindowBlur);
+    window.addEventListener("focus", handleWindowFocus);
+    event.preventDefault();
+    setIsShowInput(false);
   };
 
   const handleKeyDown = (e: any) => {
-    switch (e.code) {
-      case "KeyW":
-        setKeys((prev: IKeys) => {
-          const newKeys = { ...prev, w: { pressed: true } };
-          return newKeys;
-        });
-        break;
-      case "KeyA":
-        setKeys((prev: IKeys) => {
-          const newKeys = { ...prev, a: { pressed: true } };
-          return newKeys;
-        });
-        break;
-      case "KeyS":
-        setKeys((prev: IKeys) => {
-          const newKeys = { ...prev, s: { pressed: true } };
-          return newKeys;
-        });
-        break;
-      case "KeyD":
-        setKeys((prev: IKeys) => {
-          const newKeys = { ...prev, d: { pressed: true } };
-          return newKeys;
-        });
-        break;
-    }
+    console.log(e.code);
   };
 
   const handleKeyUp = (e: any) => {
-    switch (e.code) {
-      case "KeyW":
-        setKeys((prev: IKeys) => {
-          const newKeys = { ...prev, w: { pressed: false } };
-          return newKeys;
-        });
-        break;
-      case "KeyA":
-        setKeys((prev: IKeys) => {
-          const newKeys = { ...prev, a: { pressed: false } };
-          return newKeys;
-        });
-        break;
-      case "KeyS":
-        setKeys((prev: IKeys) => {
-          const newKeys = { ...prev, s: { pressed: false } };
-          return newKeys;
-        });
-        break;
-      case "KeyD":
-        setKeys((prev: IKeys) => {
-          const newKeys = { ...prev, d: { pressed: false } };
-          return newKeys;
-        });
-        break;
-    }
+    // console.log(e.code);
   };
 
   const handleVisibilityChange = () => {
-    if (document.hidden) {
-      // Thực hiện các hành động khi tab bị ẩn (giống như pause)
-      console.log("Pause");
-      setKeys({
-        w: {
-          pressed: false,
-        },
-        a: {
-          pressed: false,
-        },
-        s: {
-          pressed: false,
-        },
-        d: {
-          pressed: false,
-        },
-      });
-    } else {
-      // Thực hiện các hành động khi tab quay lại (giống như resume)
-      console.log("Resume");
-    }
+    console.log("Sự kiện chuyển tab trong trình duyệt");
+    window.removeEventListener("keydown", handleKeyDown);
+    window.removeEventListener("keyup", handleKeyUp);
+  };
+
+  const handleWindowBlur = () => {
+    console.log("Cửa sổ trình duyệt blur (Chuyển sang tab khác)");
+    window.removeEventListener("keydown", handleKeyDown);
+    window.removeEventListener("keyup", handleKeyUp);
+  };
+
+  const handleWindowFocus = () => {
+    console.log("Cửa sổ trình duyệt focus (Quay lại tab hiện tại)");
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
   };
 
   return (
@@ -159,10 +108,10 @@ function Game() {
       >
         <div
           onClick={() => {
-            console.log(keys);
+            // console.log(JSON.stringify(keys));
           }}
         >
-          Name player input
+          Name player
         </div>
         <input type="text" className="name-player-input" name="playerName" />
         <button type="submit" className="button btn-primary">
