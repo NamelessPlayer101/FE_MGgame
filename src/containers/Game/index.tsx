@@ -18,6 +18,7 @@ interface IKeys {
 }
 
 function Game() {
+  const [ping, setPing] = React.useState<number>(0);
   const [isShowInput, setIsShowInput] = React.useState(true);
   const [keys, setKeys] = React.useState<IKeys>({
     KeyW: {
@@ -33,10 +34,54 @@ function Game() {
       pressed: false,
     },
   });
+  const [poision, setPoision] = React.useState({
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+  });
+  let gameInterval: NodeJS.Timer | null = null;
 
   React.useEffect(() => {
     socket.connect();
     socket.on("game", handleGameOn);
+
+    gameInterval = setInterval(() => {
+      if (keys.KeyW.pressed) {
+        console.log("KeyW pressed");
+        setPoision((prev) => ({
+          ...prev,
+          y: prev.y - 5,
+        }));
+      }
+      if (keys.KeyA.pressed) {
+        console.log("KeyA pressed");
+        setPoision((prev) => ({
+          ...prev,
+          x: prev.x - 5,
+        }));
+      }
+      if (keys.KeyS.pressed) {
+        console.log("KeyS pressed");
+        setPoision((prev) => ({
+          ...prev,
+          y: prev.y + 5,
+        }));
+      }
+      if (keys.KeyD.pressed) {
+        console.log("KeyD pressed");
+        setPoision((prev) => ({
+          ...prev,
+          x: prev.x + 5,
+        }));
+      }
+    }, 15);
+
+    setInterval(() => {
+      const start = Date.now();
+      socket.emit("ping", () => {
+        const duration = Date.now() - start;
+        setPing(duration);
+      });
+    }, 5000);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
@@ -51,6 +96,7 @@ function Game() {
 
   React.useEffect(() => {
     console.log(JSON.stringify(keys));
+    console.log(JSON.stringify(poision));
   }, [keys]);
 
   const handleGameOn = (data: any) => {
@@ -68,23 +114,23 @@ function Game() {
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if ((e.code in keys)) {
+    if (e.code in keys) {
       setKeys((prev: IKeys) => {
         const newKeys = { ...prev };
         newKeys[e.code as keyof IKeys].pressed = true;
         return newKeys;
       });
-    };
+    }
   };
 
   const handleKeyUp = (e: KeyboardEvent) => {
-    if ((e.code in keys)) {
+    if (e.code in keys) {
       setKeys((prev: IKeys) => {
         const newKeys = { ...prev };
         newKeys[e.code as keyof IKeys].pressed = false;
         return newKeys;
       });
-    };
+    }
   };
 
   const handleVisibilityChange = () => {
@@ -138,14 +184,15 @@ function Game() {
       <Stage width={window.innerWidth} height={window.innerHeight}>
         <Layer>
           <Circle
-            x={window.innerWidth / 2}
-            y={window.innerHeight / 2}
+            x={poision.x}
+            y={poision.y}
             radius={15}
             fill="white"
             shadowBlur={20}
           />
         </Layer>
       </Stage>
+      <div className="game-ping">{`${ping} ms`}</div>
       <div
         className="name-player"
         style={{ display: isShowInput ? "flex" : "none" }}

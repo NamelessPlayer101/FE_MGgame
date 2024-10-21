@@ -4,6 +4,17 @@
   height: 100%;
   width: 100%;
 
+  .game-ping {
+    position: absolute;
+    top: $px10;
+    left: $px50;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    user-select: none;
+    cursor: default;
+  }
+
   .name-player {
     position: absolute;
     top: 50%;
@@ -17,6 +28,8 @@
     align-items: center;
     justify-content: center;
     gap: $px20;
+    user-select: none;
+    cursor: default;
 
     .name-player-input {
       background-color: white;
