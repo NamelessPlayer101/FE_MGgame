@@ -62,7 +62,7 @@ function Game() {
       }
 
       if (deltaX !== 0 && deltaY !== 0) {
-        const diagonalSpeed = SPEED / Math.sqrt(2);
+        const diagonalSpeed = SPEED / Math.sqrt(2.45);
         deltaX *= diagonalSpeed / SPEED;
         deltaY *= diagonalSpeed / SPEED;
       }
