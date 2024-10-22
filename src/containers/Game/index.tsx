@@ -38,36 +38,31 @@ function Game() {
     x: window.innerWidth / 2,
     y: window.innerHeight / 2,
   });
-  let gameInterval: number | undefined = undefined;
 
   React.useEffect(() => {
     socket.connect();
     socket.on("game", handleGameOn);
 
-    gameInterval = window.setInterval(() => {
+    const gameInterval = setInterval(() => {
       if (keys.KeyW.pressed) {
-        console.log("KeyW pressed");
         setPoision((prev) => ({
           ...prev,
           y: prev.y - 5,
         }));
       }
       if (keys.KeyA.pressed) {
-        console.log("KeyA pressed");
         setPoision((prev) => ({
           ...prev,
           x: prev.x - 5,
         }));
       }
       if (keys.KeyS.pressed) {
-        console.log("KeyS pressed");
         setPoision((prev) => ({
           ...prev,
           y: prev.y + 5,
         }));
       }
       if (keys.KeyD.pressed) {
-        console.log("KeyD pressed");
         setPoision((prev) => ({
           ...prev,
           x: prev.x + 5,
@@ -89,6 +84,7 @@ function Game() {
 
     return () => {
       clearInterval(pingInterval);
+      clearInterval(gameInterval);
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
       window.removeEventListener("visibilitychange", handleVisibilityChange);
@@ -98,10 +94,6 @@ function Game() {
       socket.disconnect();
     };
   }, []);
-
-  React.useEffect(() => {
-    console.log(JSON.stringify(keys));
-  }, [keys]);
 
   const handleGameOn = (data: any) => {
     console.log(data);
@@ -138,40 +130,12 @@ function Game() {
   };
 
   const handleVisibilityChange = () => {
-    setKeys({
-      KeyW: {
-        pressed: false,
-      },
-      KeyA: {
-        pressed: false,
-      },
-      KeyS: {
-        pressed: false,
-      },
-      KeyD: {
-        pressed: false,
-      },
-    });
     console.log("Sự kiện chuyển tab trong trình duyệt");
     window.removeEventListener("keydown", handleKeyDown);
     window.removeEventListener("keyup", handleKeyUp);
   };
 
   const handleWindowBlur = () => {
-    setKeys({
-      KeyW: {
-        pressed: false,
-      },
-      KeyA: {
-        pressed: false,
-      },
-      KeyS: {
-        pressed: false,
-      },
-      KeyD: {
-        pressed: false,
-      },
-    });
     console.log("Cửa sổ trình duyệt blur (Chuyển sang cửa sổ khác)");
     window.removeEventListener("keydown", handleKeyDown);
     window.removeEventListener("keyup", handleKeyUp);
