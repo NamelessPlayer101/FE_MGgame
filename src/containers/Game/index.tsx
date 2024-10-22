@@ -18,6 +18,7 @@ interface IKeys {
 }
 
 function Game() {
+  const SPEED = 5;
   const [ping, setPing] = React.useState<number>(0);
   const [isShowInput, setIsShowInput] = React.useState(true);
   const [keys, setKeys] = React.useState<IKeys>({
@@ -44,30 +45,32 @@ function Game() {
     socket.on("game", handleGameOn);
 
     const gameInterval = setInterval(() => {
+      let deltaX = 0;
+      let deltaY = 0;
+
       if (keys.KeyW.pressed) {
-        setPoision((prev) => ({
-          ...prev,
-          y: prev.y - 5,
-        }));
+        deltaY -= SPEED;
       }
       if (keys.KeyA.pressed) {
-        setPoision((prev) => ({
-          ...prev,
-          x: prev.x - 5,
-        }));
+        deltaX -= SPEED;
       }
       if (keys.KeyS.pressed) {
-        setPoision((prev) => ({
-          ...prev,
-          y: prev.y + 5,
-        }));
+        deltaY += SPEED;
       }
       if (keys.KeyD.pressed) {
-        setPoision((prev) => ({
-          ...prev,
-          x: prev.x + 5,
-        }));
+        deltaX += SPEED;
       }
+
+      if (deltaX !== 0 && deltaY !== 0) {
+        const diagonalSpeed = SPEED / Math.sqrt(2);
+        deltaX *= diagonalSpeed / SPEED;
+        deltaY *= diagonalSpeed / SPEED;
+      }
+
+      setPoision((prev) => ({
+        x: prev.x + deltaX,
+        y: prev.y + deltaY,
+      }));
     }, 15);
 
     const pingInterval = setInterval(() => {
