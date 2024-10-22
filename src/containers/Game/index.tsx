@@ -62,6 +62,7 @@ function Game() {
       }
 
       if (deltaX !== 0 && deltaY !== 0) {
+        // Theo chuẩn toán học thì là sqrt 2. Nhưng đang để 2.45 cho cảm giác ổn hơn
         const diagonalSpeed = SPEED / Math.sqrt(2.45);
         deltaX *= diagonalSpeed / SPEED;
         deltaY *= diagonalSpeed / SPEED;
