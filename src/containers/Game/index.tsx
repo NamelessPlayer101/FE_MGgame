@@ -38,13 +38,13 @@ function Game() {
     x: window.innerWidth / 2,
     y: window.innerHeight / 2,
   });
-  let gameInterval: NodeJS.Timer | null = null;
+  let gameInterval: number | undefined = undefined;
 
   React.useEffect(() => {
     socket.connect();
     socket.on("game", handleGameOn);
 
-    gameInterval = setInterval(() => {
+    gameInterval = window.setInterval(() => {
       if (keys.KeyW.pressed) {
         console.log("KeyW pressed");
         setPoision((prev) => ({
@@ -75,7 +75,7 @@ function Game() {
       }
     }, 15);
 
-    setInterval(() => {
+    const pingInterval = setInterval(() => {
       const start = Date.now();
       socket.emit("ping", () => {
         const duration = Date.now() - start;
@@ -83,7 +83,12 @@ function Game() {
       });
     }, 5000);
 
+    window.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("blur", handleWindowBlur);
+    window.addEventListener("focus", handleWindowFocus);
+
     return () => {
+      clearInterval(pingInterval);
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
       window.removeEventListener("visibilitychange", handleVisibilityChange);
@@ -96,7 +101,6 @@ function Game() {
 
   React.useEffect(() => {
     console.log(JSON.stringify(keys));
-    console.log(JSON.stringify(poision));
   }, [keys]);
 
   const handleGameOn = (data: any) => {
@@ -168,13 +172,13 @@ function Game() {
         pressed: false,
       },
     });
-    console.log("Cửa sổ trình duyệt blur (Chuyển sang tab khác)");
+    console.log("Cửa sổ trình duyệt blur (Chuyển sang cửa sổ khác)");
     window.removeEventListener("keydown", handleKeyDown);
     window.removeEventListener("keyup", handleKeyUp);
   };
 
   const handleWindowFocus = () => {
-    console.log("Cửa sổ trình duyệt focus (Quay lại tab hiện tại)");
+    console.log("Cửa sổ trình duyệt focus");
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
   };
