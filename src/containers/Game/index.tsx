@@ -1,6 +1,7 @@
 import React from "react";
 import { socket } from "../../services/socket";
 import { Stage, Layer, Circle } from "react-konva";
+import { IPlayerProps } from "../../models/Player";
 
 interface IKeys {
   KeyW: {
@@ -39,6 +40,22 @@ function Game() {
     x: window.innerWidth / 2,
     y: window.innerHeight / 2,
   });
+  const [players, setPlayers] = React.useState<IPlayerProps[]>([
+    {
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      radius: 15,
+      color: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+      username: "test",
+    },
+    {
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      radius: 15,
+      color: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+      username: "test",
+    },
+  ]);
 
   React.useEffect(() => {
     socket.connect();
@@ -105,6 +122,7 @@ function Game() {
     window.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("blur", handleWindowBlur);
     window.addEventListener("focus", handleWindowFocus);
+    socket.emit("game", "test");
     event.preventDefault();
     setIsShowInput(false);
   };
@@ -158,6 +176,16 @@ function Game() {
             fill="white"
             shadowBlur={20}
           />
+          {players.map((player, index) => (
+            <Circle
+              key={index}
+              x={player.x}
+              y={player.y}
+              radius={player.radius}
+              fill={player.color}
+              shadowBlur={20}
+            />
+          ))}
         </Layer>
       </Stage>
       <div className="game-ping">{`${ping} ms`}</div>

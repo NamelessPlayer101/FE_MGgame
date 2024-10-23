@@ -1,4 +1,4 @@
-interface IPlayerProps {
+export interface IPlayerProps {
   x: number;
   y: number;
   radius: number;
