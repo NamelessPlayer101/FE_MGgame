@@ -82,10 +82,6 @@ function Game() {
       });
     }, 5000);
 
-    window.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("blur", handleWindowBlur);
-    window.addEventListener("focus", handleWindowFocus);
-
     return () => {
       clearInterval(pingInterval);
       clearInterval(gameInterval);
