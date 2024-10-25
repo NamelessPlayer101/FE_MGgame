@@ -47,20 +47,20 @@ function Chat() {
   };
 
   return (
-    <div className={'chat'}>
+    <div className={"chat"}>
       <div
         onClick={() => {
           console.log(socket.id);
         }}
-        className={'header'}
+        className={"header"}
       >
         Chat
       </div>
-      <div className={'content'}>
+      <div className={"content"}>
         {messages.map((message, index) => (
           <div
             key={index}
-            className={'message'}
+            className={"message"}
             style={
               message.id === socket.id
                 ? {
@@ -77,8 +77,9 @@ function Chat() {
           </div>
         ))}
       </div>
-      <div className={'footer'}>
+      <div className={"footer"}>
         <input
+          name="message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => {
@@ -87,13 +88,20 @@ function Chat() {
               onSubmit();
             }
           }}
-          className={'input'}
+          className={"input"}
           type="text"
+          spellCheck={false}
         />
         <button
-          onClick={message ? onSubmit : () => {}}
-          className={'button'}
-          style={{marginRight: "16px"}}
+          onClick={() => {
+            if (message) {
+              setMessage("");
+              onSubmit();
+              document.getElementsByName("message")[0].focus();
+            }
+          }}
+          className={"button"}
+          style={{ marginRight: "16px" }}
         >
           Send
         </button>

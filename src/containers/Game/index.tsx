@@ -22,6 +22,7 @@ function Game() {
   const SPEED = 5;
   const [ping, setPing] = React.useState<number>(0);
   const [isShowInput, setIsShowInput] = React.useState(true);
+  const [namePlayer, setNamePlayer] = React.useState<string>("");
   const [keys, setKeys] = React.useState<IKeys>({
     KeyW: {
       pressed: false,
@@ -40,26 +41,14 @@ function Game() {
     x: window.innerWidth / 2,
     y: window.innerHeight / 2,
   });
-  const [players, setPlayers] = React.useState<IPlayerProps[]>([
-    {
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      radius: 15,
-      color: `#${Math.floor(Math.random()*16777215).toString(16)}`,
-      username: "test",
-    },
-    {
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      radius: 15,
-      color: `#${Math.floor(Math.random()*16777215).toString(16)}`,
-      username: "test",
-    },
-  ]);
+  const [players, setPlayers] = React.useState<{ [key: string]: IPlayerProps }>(
+    {}
+  );
 
   React.useEffect(() => {
     socket.connect();
     socket.on("game", handleGameOn);
+    socket.on("updatePlayers", handleUpdatePlayers);
 
     const gameInterval = setInterval(() => {
       let deltaX = 0;
@@ -79,8 +68,7 @@ function Game() {
       }
 
       if (deltaX !== 0 && deltaY !== 0) {
-        // Theo chuẩn toán học thì là sqrt 2. Nhưng đang để 2.45 cho cảm giác ổn hơn
-        const diagonalSpeed = SPEED / Math.sqrt(2.45);
+        const diagonalSpeed = SPEED / Math.sqrt(2);
         deltaX *= diagonalSpeed / SPEED;
         deltaY *= diagonalSpeed / SPEED;
       }
@@ -113,7 +101,13 @@ function Game() {
   }, []);
 
   const handleGameOn = (data: any) => {
-    console.log(data);
+    const temp = JSON.parse(data);
+    setPlayers(temp.data);
+  };
+
+  const handleUpdatePlayers = (data: any) => {
+    // const temp = JSON.parse(data);
+    // setPlayers(temp.data);
   };
 
   const onSubmit = (event: any) => {
@@ -122,12 +116,24 @@ function Game() {
     window.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("blur", handleWindowBlur);
     window.addEventListener("focus", handleWindowFocus);
-    socket.emit("game", "test");
+    socket.emit(
+      "game",
+      JSON.stringify({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        username: namePlayer,
+        color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+      })
+    );
     event.preventDefault();
     setIsShowInput(false);
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.code === "KeyQ") {
+      console.log(players);
+    }
+
     if (e.code in keys) {
       setKeys((prev: IKeys) => {
         const newKeys = { ...prev };
@@ -176,13 +182,13 @@ function Game() {
             fill="white"
             shadowBlur={20}
           />
-          {players.map((player, index) => (
+          {Object.keys(players).map((player) => (
             <Circle
-              key={index}
-              x={player.x}
-              y={player.y}
-              radius={player.radius}
-              fill={player.color}
+              key={player}
+              x={players[player].x}
+              y={players[player].y}
+              radius={players[player].radius}
+              fill={players[player].color}
               shadowBlur={20}
             />
           ))}
@@ -194,7 +200,12 @@ function Game() {
         style={{ display: isShowInput ? "flex" : "none" }}
       >
         <div>Name player</div>
-        <input type="text" className="name-player-input" name="playerName" />
+        <input
+          type="text"
+          className="name-player-input"
+          name="playerName"
+          onChange={(e) => setNamePlayer(e.target.value)}
+        />
         <button type="submit" className="button btn-primary">
           Game on!
         </button>
